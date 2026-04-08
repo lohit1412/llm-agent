@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athena</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <nav class="sidebar">
+            <!-- logo, new chat button, conversation list -->
+             <div class="sidebar-header">
+                <span class="logo">Athena</span>
+                <button class="new-chat-btn" onclick="newChat()">+</button>
+             </div>
+             <ul class="conversation-list" id="conversationList">
+                <!-- conversations will go here when DB is ready -->
+             </ul>
+        </nav>
+
+        <main class="chat-area">
+            <div class="messages" id="messages">
+                <!-- scrollable thread -->
+                <div class="welcome">
+                    <p>How can I help you today?</p>
+                </div>
+            </div>
+
+            <footer class="input-bar">
+                <!-- textarea + send button -->
+                <textarea
+                    id="messageInput"
+                    placeholder="Message Athena..."
+                    rows="1"
+                    onkeydown="handleKeyDown(event)">
+                </textarea>
+                <button class="send-btn" onclick="sendMessage()">Send</button>
+            </footer>
+        </main>
+    </div>
+</body>
+<script src="app.js"></script>
+</html>

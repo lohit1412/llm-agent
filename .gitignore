@@ -1,6 +1,9 @@
 # Critical - never commit these
 venv/
 .env
+memory.json
+embeddings.npy
+memory_summary.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

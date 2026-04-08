@@ -4,9 +4,16 @@ import numpy as np
 import config
 from sklearn.metrics.pairwise import cosine_similarity
 
+MEMORY_PROMPT_FILE = "memory_prompt.txt"
 MEMORY_FILE = "memory.json"
 EMBEDDINGS_FILE = "embeddings.npy"
 SUMMARY_FILE = "memory_summary.txt"
+
+def load_memory_prompt():
+    if not os.path.exists(MEMORY_PROMPT_FILE):
+        return None
+    with open(MEMORY_PROMPT_FILE, "r") as f:
+        return f.read()
 
 TRIVIAL_MESSAGES = {
     "ok", "hi", "hey", "thanks", "bye", "exit", 
@@ -92,16 +99,15 @@ def summarize_memory(messages):
         for msg in messages
     ])
     
+    memory_prompt = load_memory_prompt() or "Summarize this conversation. Focus on who the user is, key facts, and main topics. Keep under 500 words."
+    
     response = config.client.messages.create(
         model=config.MODEL,
-        max_tokens=300,
+        max_tokens=600,
         messages=[
             {
                 "role": "user",
-                "content": f"""Summarize this conversation history concisely.
-                Focus on: who the user is, key facts about them, and main topics discussed.
-                Keep it under 150 words.
-                CONVERSATION: {conversation_text}"""
+                "content": f"{memory_prompt}\n\nCONVERSATION:\n{conversation_text}"
             }
         ]
     )
@@ -121,6 +127,7 @@ def save_summary(messages):
     
     # Load existing summary if it exists
     existing_summary = load_summary()
+    memory_prompt = load_memory_prompt()
     
     # Build the new conversation text
     conversation_text = "\n".join([
@@ -131,22 +138,22 @@ def save_summary(messages):
     
     # Combine existing summary with new conversation
     if existing_summary:
-        prompt = f"""You are maintaining a running memory summary of conversations with a user.
-        EXISTING SUMMARY: {existing_summary}
-        NEW CONVERSATION: {conversation_text}
-        Update the summary by merging the existing summary with the new conversation.
-        - Keep key facts about the user (name, preferences, goals)
-        - Add important new topics discussed
-        - Remove outdated or redundant information
-        - Keep it under 500 words
-        - Write it as a concise factual summary, not a narrative"""
+        prompt = f"""{memory_prompt}
+        
+        EXISTING SUMMARY: 
+        {existing_summary}
+        
+        NEW CONVERSATION: 
+        {conversation_text}
+
+        Update the summary."""
     else:
-        prompt = f"""Summarize this conversation concisely.
-        Focus on: who the user is, key facts about them, and main topics discussed.
-        Keep it under 500 words.
+        prompt = f"""{memory_prompt}
 
         CONVERSATION:
-        {conversation_text}"""
+        {conversation_text}
+        
+        Create the initial summary."""
     
     response = config.client.messages.create(
         model=config.MODEL,
