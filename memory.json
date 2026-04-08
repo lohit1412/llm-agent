@@ -1,66 +1,38 @@
 [
   {
     "role": "user",
-    "content": "Hi, whats your name?"
+    "content": "Here is context from our previous conversations: **Summary**\n\n**Who Lohit is:**\nLohit is located in Plano, Texas and is actively transitioning into an AI engineering career. He's focused full-time on upskilling in GenAI and building me as a hands-on learning project.\n\n**Key Facts:**\n- Tech setup: Windows PC/laptop + iOS devices\n- Social circle: Close family and friends\n- Timezone: Central (Texas)\n- Communication style: Adaptive (formal or casual depending on context)\n\n**Main Topics Discussed:**\n\n1. **Memory persistence setup:** Lohit confirmed he's given me memory persistence across sessions, and we're testing how well I retain and use personal details in future conversations.\n\n2. **Profile building:** Lohit provided comprehensive personal information to establish a baseline profile, including:\n   - Career goal: AI engineer (GenAI focus)\n   - Hobbies: Football (Manchester United fan, watches weekends; follows top-6 PL teams, Champions League, FA Cup, Carabao Cup, World Cup QF+)\n   - Gaming: CoD multiplayer with friends evenings; narrative-driven single-player RPGs (Witcher, Cyberpunk, Spider-Man, Ghost of Tsushima, God of War, Halo, FIFA)\n   - Reading: Fiction with strong world-building (Harry Potter, Percy Jackson, Shiva Trilogy)\n\n3. **Testing approach:** Rather than gathering additional details, Lohit decided to test persistence with the current profile, allowing us to verify whether I remember and naturally reference these details in future conversations."
   },
   {
     "role": "assistant",
-    "content": "I'm Athena, your intelligent personal assistant integrated into your Apple devices. How can I help?"
+    "content": "Understood. I have context from our previous conversations and will use it naturally."
+  },
+  {
+    "role": "assistant",
+    "content": "Hey Lohit. What's up?"
   },
   {
     "role": "user",
-    "content": "What is my name?"
+    "content": "give me a summary of what you know about me. You know why im asking you this right?"
   },
   {
     "role": "assistant",
-    "content": "I don't have access to your name unless you tell me. I can see relevant context from your device when it's directly useful for a task, but I don't store or reference personal information unless you bring it up first.\n\nWhat's your name?"
+    "content": "Yeah\u2014testing whether I actually retained the profile you built and can reference it naturally rather than just claiming I have memory.\n\nHere's what I have:\n\nYou're in Plano, Texas (Central timezone), transitioning full-time into AI engineering with a GenAI focus. Windows PC/laptop + iOS setup. You're a Manchester United fan who catches football on weekends\u2014follow the top-6 PL teams, Champions League, FA Cup, Carabao Cup, and World Cup from QF onwards. Gaming-wise: CoD multiplayer with friends in the evenings, and narrative RPGs when you want something deeper (Witcher, Cyberpunk, Spider-Man, Ghost of Tsushima, God of War, Halo, FIFA). Reading leans into fiction with solid world-building\u2014Harry Potter, Percy Jackson, Shiva Trilogy. Close family and friends in your social circle.\n\nHow'd I do?"
   },
   {
     "role": "user",
-    "content": "It's Lohit"
+    "content": "alright looks good"
   },
   {
     "role": "assistant",
-    "content": "Got it, Lohit. How can I help you today?"
+    "content": "Good. Let me know what you need."
   },
   {
     "role": "user",
-    "content": "give me latest news on genAI"
+    "content": "print out the summary provided to you"
   },
   {
     "role": "assistant",
-    "content": "Here are the latest GenAI trends, Lohit:\n\n**Enterprise spending surged** \u2014 Companies spent $37 billion on generative AI in 2025, up 3.2x from $11.5 billion in 2024. **Economic impact** \u2014 GenAI added $4.2 trillion to the global economy in 2024. **2025 outlook** \u2014 Capabilities are evolving across creative arts, scientific discovery, and enterprise applications.\n\nWant me to dig deeper into any specific area like AI regulation, specific company announcements, or particular use cases?"
-  },
-  {
-    "role": "user",
-    "content": "Hey"
-  },
-  {
-    "role": "assistant",
-    "content": "Hey, what's up? What do you need?"
-  },
-  {
-    "role": "user",
-    "content": "What's my name?"
-  },
-  {
-    "role": "assistant",
-    "content": "Your name is Lohit. You told me a moment ago."
-  },
-  {
-    "role": "user",
-    "content": "what did we talk about before?"
-  },
-  {
-    "role": "assistant",
-    "content": "We talked about generative AI news \u2014 I gave you some recent stats on enterprise spending, economic impact, and 2025 outlook for GenAI."
-  },
-  {
-    "role": "user",
-    "content": "alright thank you"
-  },
-  {
-    "role": "assistant",
-    "content": "You're welcome. Let me know if you need anything else."
+    "content": "Here's the summary from the context I was given:\n\n---\n\n**Who Lohit is:**\nLohit is located in Plano, Texas and is actively transitioning into an AI engineering career. He's focused full-time on upskilling in GenAI and building me as a hands-on learning project.\n\n**Key Facts:**\n- Tech setup: Windows PC/laptop + iOS devices\n- Social circle: Close family and friends\n- Timezone: Central (Texas)\n- Communication style: Adaptive (formal or casual depending on context)\n\n**Main Topics Discussed:**\n\n1. **Memory persistence setup:** Lohit confirmed he's given me memory persistence across sessions, and we're testing how well I retain and use personal details in future conversations.\n\n2. **Profile building:** Lohit provided comprehensive personal information to establish a baseline profile, including:\n   - Career goal: AI engineer (GenAI focus)\n   - Hobbies: Football (Manchester United fan, watches weekends; follows top-6 PL teams, Champions League, FA Cup, Carabao Cup, World Cup QF+)\n   - Gaming: CoD multiplayer with friends evenings; narrative-driven single-player RPGs (Witcher, Cyberpunk, Spider-Man, Ghost of Tsushima, God of War, Halo, FIFA)\n   - Reading: Fiction with strong world-building (Harry Potter, Percy Jackson, Shiva Trilogy)\n\n3. **Testing approach:** Rather than gathering additional details, Lohit decided to test persistence with the current profile, allowing us to verify whether I remember and naturally reference these details in future conversations."
   }
 ]

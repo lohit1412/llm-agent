@@ -8,11 +8,17 @@ class Role(Enum):
     ASSISTANT = "assistant"
     SYSTEM = "system"
 
-def user_message(content):
-    return {"role": Role.USER.value, "content": content}
+def user_message(content, embedding = None):
+    msg = {"role": Role.USER.value, "content": content}
+    if embedding is not None:
+        msg["embedding"] = embedding.tolist() if hasattr(embedding, 'tolist') else embedding
+    return msg
 
-def assistant_message(content):
-    return {"role": Role.ASSISTANT.value, "content": content}
+def assistant_message(content, embedding = None):
+    msg = {"role": Role.ASSISTANT.value, "content": content}
+    if embedding is not None:
+        msg["embedding"] = embedding.tolist() if hasattr(embedding, 'tolist') else embedding
+    return msg
 
 def tool_result_message(tool_results):
     return {

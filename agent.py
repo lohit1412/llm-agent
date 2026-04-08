@@ -3,6 +3,8 @@ import tools
 import models
 import json
 from tool_definitions import tool_definitions
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 def run_tool(tool_name, tool_input):
     match tool_name:
@@ -27,9 +29,16 @@ def run_tool(tool_name, tool_input):
         return result.data
     else:
         return {"Error": result.message}
+    
+def strip_embeddings(messages):
+    clean = []
+    for msg in messages:
+        clean.append({"role": msg["role"], "content": msg["content"]})
+    return clean
 
 def process_message(messages, user_input):
-    messages.append(models.user_message(user_input))
+    embedding = config.embedding_model.encode(user_input)
+    messages.append(models.user_message(user_input, embedding))
     
     iteration = 0
     
@@ -44,12 +53,11 @@ def process_message(messages, user_input):
             max_tokens=config.MAX_TOKENS,
             system=config.SYSTEM_PROMPT,
             tools=tool_definitions,
-            messages=messages
+            messages=strip_embeddings(messages)
         )
         
         if response.stop_reason == "tool_use":
             tool_uses = [block for block in response.content if block.type == "tool_use"]
-
             messages.append(models.assistant_message(response.content))
             
             tool_results = []
@@ -72,5 +80,6 @@ def process_message(messages, user_input):
         
         else:
             reply = response.content[0].text
-            messages.append(models.assistant_message(reply))
+            embedding = config.embedding_model.encode(reply)
+            messages.append(models.assistant_message(reply, embedding))
             return reply, messages
