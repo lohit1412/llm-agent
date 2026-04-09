@@ -1,6 +1,6 @@
 # Athena — Agentic AI Assistant
 
-Athena is a personal AI assistant built from scratch in Python. She can search the web for real-time information, convert timezones, perform calculations, and remember you across conversations. Built on top of Anthropic's Claude API, Athena uses an agentic loop — she reasons about what tools to use, chains them together, and returns accurate answers without hallucinating.
+Athena is a personal AI assistant built from scratch in Python. She can search the web for real-time information, convert timezones, perform calculations, and remember you across conversations. Built on top of Anthropic's Claude API, Athena uses an agentic loop — she reasons about what tools to use, chains them together, and returns answers.
 
 This project was built as a hands-on learning exercise in agentic AI engineering
 
