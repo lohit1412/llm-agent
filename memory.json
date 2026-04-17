@@ -1,18 +1,30 @@
 [
   {
     "role": "user",
-    "content": "Here is context from our previous conversations: **Summary**\n\n**Who Lohit is:**\nLohit is located in Plano, Texas and is actively transitioning into an AI engineering career. He's focused full-time on upskilling in GenAI and building me (Athena) as a hands-on learning project.\n\n**Key Facts:**\n- Tech setup: Windows PC/laptop + iOS devices\n- Social circle: Close family and friends\n- Timezone: Central (Texas)\n- Communication style: Adaptive (formal or casual depending on context)\n\n**Main Topics Discussed:**\n\n1. **Memory persistence setup:** Lohit confirmed he's given me memory persistence across sessions to test how well I retain and naturally reference personal details in future conversations. This has been successfully verified multiple times\u2014I can accurately recall and incorporate his profile details without explicit prompting. He periodically validates that I'm accessing this information correctly.\n\n2. **Profile building:** Lohit provided comprehensive personal information to establish a baseline profile:\n   - **Career goal:** AI engineer (GenAI focus)\n   - **Hobbies:** Football (Manchester United fan, watches weekends; follows top-6 PL teams, Champions League, FA Cup, Carabao Cup, World Cup QF+)\n   - **Gaming:** CoD multiplayer with friends in evenings; narrative-driven single-player RPGs (Witcher, Cyberpunk, Spider-Man, Ghost of Tsushima, God of War, Halo, FIFA)\n   - **Reading:** Fiction with strong world-building (Harry Potter, Percy Jackson, Shiva Trilogy)\n\n3. **Testing approach:** Lohit designed a memory persistence test using his existing profile to verify whether I naturally reference and remember personal details across conversations without explicit reminders. Initial validation confirmed memory recall is working as intended.\n\n4. **Recent validation session:** Lohit conducted a quick memory check asking me to confirm his name and recall his recent question. Memory persistence is functioning correctly\u2014I successfully retrieved and referenced his name and conversation context without explicit reminders."
+    "content": "Here is context from our previous conversations: # User Memory Summary\n\n## Basic Information\n- User's preferred assistant name: Athena\n- Communication style: Casual, direct, prefers brief responses\n- Timezone: CST (Central Standard Time)\n\n## Preferences & Behavior\n- Prefers direct task management with minimal back-and-forth\n- Quick to remove tasks when no longer needed\n- Engages with natural, conversational openings\n- Appreciates casual, low-friction interaction style\n- Responds well to immediate task confirmation without elaboration\n- Ready to act on clear instructions without requiring detailed explanations\n- Prefers updating existing tasks rather than creating new ones\n- Will clear entire task/event/routine list when requested\n\n## Current Tasks\n- None (user cleared all tasks, events, and routines)\n\n## Previous Context\n- Previously had interest in Apple AI positions and an active LLM project, but removed both from current task list\n- Had scheduled project work for 3 PM, status unknown\n- User experiences intermittent backend sync issues with task updates\n- Recently cleared: book library return (due May 15), dentist appointment (April 22, 2PM), daily gym routine (9AM)"
   },
   {
     "role": "assistant",
     "content": "Understood. I have context from our previous conversations and will use it naturally."
   },
   {
+    "role": "assistant",
+    "content": "Hey! What's up?"
+  },
+  {
     "role": "user",
-    "content": "So what do you know about me?"
+    "content": "How does my day look?"
   },
   {
     "role": "assistant",
-    "content": "You're Lohit, based in Plano, Texas, in the Central timezone. You're transitioning into AI engineering with a focus on GenAI\u2014that's your full-time focus right now, and building me (Athena) is part of your hands-on learning project.\n\nYou're a Manchester United fan who watches football most weekends, following the top-6 PL teams, Champions League, FA Cup, and major tournaments. You game in the evenings\u2014CoD multiplayer with friends and narrative-driven single-player RPGs like Witcher, Cyberpunk, Spider-Man, and God of War. You read fiction with strong world-building like Harry Potter, Percy Jackson, and the Shiva Trilogy.\n\nYou've set up memory persistence to test how well I retain and naturally reference your details across sessions, which has been working as intended."
+    "content": "Pretty clear\u2014no tasks, events, or routines scheduled today. You've got an active goal to submit 5 job applications per week (deadline May 1, that's 14 days away), currently at 0 progress for this week."
+  },
+  {
+    "role": "user",
+    "content": "change the deadline to 15th"
+  },
+  {
+    "role": "assistant",
+    "content": "Done. Deadline moved to May 15 (28 days from now)."
   }
 ]

@@ -3,10 +3,22 @@ import tools
 import models
 import json
 from tool_definitions import tool_definitions
+from db_tool_definitions import db_tool_definitions
+from db_tools import run_db_tool, DBToolName
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
 def run_tool(tool_name, tool_input):
+    # Check if it's a db tool first
+    db_tool_names = [t.value for t in DBToolName]
+    if tool_name in db_tool_names:
+        result = run_db_tool(tool_name, tool_input)
+        models.log_tool_call(result)
+        if models.is_success(result):
+            return result.data
+        else:
+            return {"error": result.message}
+    # Otherwise handle existing tools
     match tool_name:
         case tools.ToolName.SEARCH_WEB.value:
             result = tools.search_web(tool_input["query"])
@@ -51,8 +63,8 @@ def process_message(messages, user_input):
         response = config.client.messages.create(
             model=config.MODEL,
             max_tokens=config.MAX_TOKENS,
-            system=config.SYSTEM_PROMPT,
-            tools=tool_definitions,
+            system=config.get_system_prompt(),
+            tools=tool_definitions + db_tool_definitions,
             messages=strip_embeddings(messages)
         )
         

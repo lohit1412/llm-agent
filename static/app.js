@@ -1,5 +1,5 @@
 const API_URL = 'http://127.0.0.1:8000';
-let sessionId = null;
+let sessionId = localStorage.getItem('athena_session_id') || null; // ← changed
 
 async function sendMessage() {
     const input = document.getElementById('messageInput');
@@ -7,21 +7,15 @@ async function sendMessage() {
 
     if(!message) return;
 
-    // Clear input
     input.value = '';
-
-    // Show user message
     addMessage(message, 'user');
 
-    // Hide welcome message if visible
     const welcome = document.querySelector('.welcome');
     if (welcome) welcome.style.display = 'none';
 
-    // Disable send while waiting
     const sendBtn = document.querySelector('.send-btn');
     sendBtn.disabled = true;
 
-    // Add loading bubble
     const loadingId = 'loading-' + Date.now();
     const loadingBubble = document.createElement('div');
     loadingBubble.classList.add('message', 'athena');
@@ -29,36 +23,34 @@ async function sendMessage() {
     loadingBubble.textContent = '...';
     document.getElementById('messages').appendChild(loadingBubble);
 
-    // Send to API
     try {
         const response = await fetch(`${API_URL}/chat`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 message: message,
-                sessionId: sessionId
+                session_id: sessionId  // ← changed
             })
         });
 
         const data = await response.json();
-        sessionId = data.sessionId;
+        sessionId = data.session_id;  // ← changed
+        localStorage.setItem('athena_session_id', sessionId);  // ← added
         document.getElementById(loadingId).remove();
         addMessage(data.reply, 'athena');
     } catch (error) {
+        document.getElementById(loadingId).remove();
         addMessage('Error connecting to Athena. is the server running?', 'error');
     } finally {
-        // Always re-enable send
         sendBtn.disabled = false;
     }
 }
 
 function addMessage(text, sender) {
     const messages = document.getElementById('messages');
-
     const bubble = document.createElement('div');
     bubble.classList.add('message', sender);
     bubble.textContent = text;
-
     messages.appendChild(bubble);
     messages.scrollTop = messages.scrollHeight;
 }
@@ -72,6 +64,7 @@ function handleKeyDown(event) {
 
 function newChat() {
     sessionId = null;
+    localStorage.removeItem('athena_session_id');  // ← added
     const messages = document.getElementById('messages');
-    messages.innerHTML = ' <div class="welcome"><p>How can I help you today?</p></div>';
+    messages.innerHTML = '<div class="welcome"><p>How can I help you today?</p></div>';
 }
