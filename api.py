@@ -19,8 +19,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory session store
-sessions = {}
+# ── In-memory cache (hybrid) ─────────────────────────
+sessions_cache = {}
+SYNC_EVERY = 10  # sync to DB every N messages
 
 class ChatRequest(BaseModel):
     message: str
@@ -30,34 +31,65 @@ class ChatResponse(BaseModel):
     reply: str
     session_id: str
 
+# ── Session Management ───────────────────────────────
+
 def get_or_create_session(session_id: Optional[str]) -> tuple:
-    if session_id is None or session_id not in sessions:
-        new_id = session_id or str(uuid.uuid4())
-        messages = []
-        summary = memory.load_summary()
-        if summary:
-            messages.append({
-                "role": "user",
-                "content": f"Here is context from our previous conversations: {summary}"
-            })
-            messages.append({
-                "role": "assistant",
-                "content": "Understood. I have context from our previous conversations and will use it naturally."
-            })
-        sessions[new_id] = messages
-        return new_id, sessions[new_id]
-    return session_id, sessions[session_id]
+    # Check RAM cache first
+    if session_id and session_id in sessions_cache:
+        return session_id, sessions_cache[session_id]
+
+    # Try loading from Supabase
+    if session_id:
+        messages = database.load_session_from_db(session_id)
+        if messages:
+            sessions_cache[session_id] = messages
+            return session_id, messages
+
+    # Create new session
+    new_id = session_id or str(uuid.uuid4())
+    messages = []
+
+    # Load memory summary for context
+    summary = memory.load_summary()
+    if summary:
+        messages.append({
+            "role": "user",
+            "content": f"Here is context from our previous conversations: {summary}"
+        })
+        messages.append({
+            "role": "assistant",
+            "content": "Understood. I have context from our previous conversations and will use it naturally."
+        })
+
+    sessions_cache[new_id] = messages
+    # Save new session to DB immediately
+    database.save_session_to_db(new_id, messages)
+    return new_id, messages
+
+def should_sync(messages):
+    # Sync every SYNC_EVERY messages
+    return len(messages) % SYNC_EVERY == 0
+
+# ── Endpoints ────────────────────────────────────────
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     session_id, messages = get_or_create_session(request.session_id)
+
     reply, updated_messages = process_message(messages, request.message)
-    sessions[session_id] = updated_messages
+    sessions_cache[session_id] = updated_messages
+
+    # Sync to DB periodically
+    if should_sync(updated_messages):
+        database.save_session_to_db(session_id, updated_messages)
+
     return ChatResponse(reply=reply, session_id=session_id)
 
 @app.get("/briefing")
 async def briefing():
     data = database.get_briefing_data()
+    summary = memory.load_summary() or ""
+
     response = config.client.messages.create(
         model=config.MODEL,
         max_tokens=1024,
@@ -65,12 +97,11 @@ async def briefing():
         messages=[
             {
                 "role": "user",
-                "content": f"""Compile a natural conversational morning briefing based on this data:
+                "content": f"""{config.BRIEFING_PROMPT}
 
-{json.dumps(data, indent=2, default=str)}
+                USER CONTEXT: {summary}
 
-Be concise. Lead with the most important things. Mention streaks if relevant.
-If nothing is scheduled say so clearly. Sound like a helpful companion not a robot."""
+                DATA: {json.dumps(data, indent=2, default=str)}"""
             }
         ]
     )
@@ -78,10 +109,12 @@ If nothing is scheduled say so clearly. Sound like a helpful companion not a rob
 
 @app.on_event("shutdown")
 async def shutdown():
-    for session_id, messages in sessions.items():
+    # Save all active sessions to Supabase on shutdown
+    for session_id, messages in sessions_cache.items():
+        database.save_session_to_db(session_id, messages)
         memory.save_memory(messages)
         memory.save_summary(messages)
-    print(f"💾 Saved {len(sessions)} sessions on shutdown")
+    print(f"💾 Saved {len(sessions_cache)} sessions to Supabase on shutdown")
 
 # Static files MUST be last
 app.mount("/", StaticFiles(directory="static", html=True), name="static")

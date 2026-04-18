@@ -17,6 +17,9 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 with open("system_prompt.txt", "r") as f:
     _base_prompt = f.read()
 
+with open("briefing_prompt.txt", "r") as f:
+    BRIEFING_PROMPT = f.read()
+
 def get_system_prompt():
     today = datetime.now().strftime("%A, %B %d, %Y")
     current_time = datetime.now().strftime("%I:%M %p")

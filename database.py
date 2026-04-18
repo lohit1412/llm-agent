@@ -269,3 +269,76 @@ def get_briefing_data():
         "context": get_today_context(),
         "patterns": get_patterns()
     }
+
+# ── User Memory ──────────────────────────────────────
+
+def save_summary_to_db(summary, user_id="default_user"):
+    existing = supabase.table("user_memory").select("*").eq("user_id", user_id).execute()
+    if existing.data:
+        result = supabase.table("user_memory").update({
+            "summary": summary,
+            "updated_at": datetime.now().isoformat()
+        }).eq("user_id", user_id).execute()
+    else:
+        result = supabase.table("user_memory").insert({
+            "user_id": user_id,
+            "summary": summary
+        }).execute()
+    return result.data
+
+def load_summary_from_db(user_id="default_user"):
+    result = supabase.table("user_memory").select("summary").eq("user_id", user_id).execute()
+    if result.data:
+        return result.data[0]["summary"]
+    return None
+
+# ── Sessions ─────────────────────────────────────────
+
+def save_session_to_db(session_id, messages, user_id="default_user"):
+    import json
+    # Strip embeddings before saving
+    clean = [{"role": m["role"], "content": m["content"]}
+             for m in messages
+             if isinstance(m.get("content"), str)]
+    existing = supabase.table("sessions").select("id").eq("id", session_id).execute()
+    if existing.data:
+        result = supabase.table("sessions").update({
+            "messages": json.dumps(clean),
+            "last_active": datetime.now().isoformat()
+        }).eq("id", session_id).execute()
+    else:
+        result = supabase.table("sessions").insert({
+            "id": session_id,
+            "user_id": user_id,
+            "messages": json.dumps(clean)
+        }).execute()
+    return result.data
+
+def load_session_from_db(session_id):
+    import json
+    result = supabase.table("sessions").select("*").eq("id", session_id).execute()
+    if result.data:
+        messages = result.data[0]["messages"]
+        if isinstance(messages, str):
+            return json.loads(messages)
+        return messages
+    return None
+
+# ── Embeddings ───────────────────────────────────────
+
+def save_embedding(content, role, embedding, user_id="default_user"):
+    result = supabase.table("embeddings").insert({
+        "user_id": user_id,
+        "content": content,
+        "role": role,
+        "embedding": embedding
+    }).execute()
+    return result.data
+
+def search_embeddings(query_embedding, top_k=5, user_id="default_user"):
+    result = supabase.rpc("match_embeddings", {
+        "query_embedding": query_embedding,
+        "match_count": top_k,
+        "user_id_filter": user_id
+    }).execute()
+    return result.data

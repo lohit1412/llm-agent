@@ -90,6 +90,14 @@ async function sendMessage() {
     const welcome = document.getElementById('welcomeMsg');
     if (welcome) welcome.style.display = 'none';
 
+    // Hide briefing after first message
+    const briefingPanel = document.getElementById('briefingPanel');
+    if (briefingPanel) {
+        briefingPanel.style.transition = 'opacity 0.4s ease, max-height 0.4s ease';
+        briefingPanel.style.opacity = '0';
+        setTimeout(() => briefingPanel.style.display = 'none', 400);
+    }
+
     addMessage(message, 'user');
 
     const sendBtn = document.getElementById('sendBtn');
@@ -181,6 +189,16 @@ function autoResize(el) {
 function newChat() {
     sessionId = null;
     localStorage.removeItem('athena_session_id');
+
+    // Restore briefing panel
+    const briefingPanel = document.getElementById('briefingPanel');
+    if (briefingPanel) {
+        briefingPanel.style.display = '';
+        briefingPanel.style.opacity = '1';
+    }
+
+    // Reload briefing content
+    loadBriefing();
 
     const messages = document.getElementById('messages');
     messages.innerHTML = `
